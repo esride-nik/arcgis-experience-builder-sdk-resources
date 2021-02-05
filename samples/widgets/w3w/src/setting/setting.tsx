@@ -17,12 +17,12 @@
   A copy of the license is available in the repository's
   LICENSE file.
 */
-import {React, Immutable, DataSourceManager} from 'jimu-core';
-import {BaseWidgetSetting} from 'jimu-for-builder';
-import {JimuMapViewSelector} from 'jimu-ui/setting-components';
-import {ArcGISDataSourceTypes} from 'jimu-arcgis';
+import { React, Immutable, DataSourceManager } from 'jimu-core';
+import { BaseWidgetSetting } from 'jimu-for-builder';
+import { JimuMapViewSelector } from 'jimu-ui/advanced/setting-components';
+import { ArcGISDataSourceTypes } from 'jimu-arcgis';
 
-export default class Setting extends BaseWidgetSetting{
+export default class Setting extends BaseWidgetSetting {
   supportedTypes = Immutable([ArcGISDataSourceTypes.WebMap]);
   dsManager = DataSourceManager.getInstance();
 
@@ -33,9 +33,9 @@ export default class Setting extends BaseWidgetSetting{
     });
   }
 
-  render(){
+  render() {
     return <div className="sample-use-map-view-setting p-2">
-      <JimuMapViewSelector onSelect={this.onMapSelected} useMapWidgetIds={this.props.useMapWidgetIds}/>
+      <JimuMapViewSelector onSelect={this.onMapSelected} useMapWidgetIds={this.props.useMapWidgetIds} />
     </div>
   }
 }
