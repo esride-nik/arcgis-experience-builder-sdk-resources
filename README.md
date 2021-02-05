@@ -3,7 +3,8 @@
 This repository provides samples for widgets and themes built with ArcGIS Experience Builder. Learn more about [ArcGIS Experience Builder SDK](https://developers.arcgis.com/experience-builder/guide/core-concepts/). 
 
 ## Features
-- [Samples](samples)
+- [Theme samples](samples/themes)
+- [Widget samples](samples/widgets)
 
 ## Instructions
 1. Fork and then clone this repo.
@@ -23,7 +24,7 @@ Find a bug or want to request a new feature? Please let us know by submitting an
 Esri welcomes contributions from anyone and everyone. Please see our [guidelines for contributing](https://github.com/esri/contributing).
 
 ## Licensing 
-Copyright 2020 Esri
+Copyright 2021 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
