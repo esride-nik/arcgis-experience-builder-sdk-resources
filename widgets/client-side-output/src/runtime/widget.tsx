@@ -1,4 +1,4 @@
-import { React, type AllWidgetProps, DataSourceComponent, dataSourceUtils, DataSourceManager, type FeatureLayerDataSource, DataSourceStatus } from 'jimu-core'
+import { React, type AllWidgetProps, DataSourceComponent, dataSourceUtils, DataSourceManager, type FeatureLayerDataSource, DataSourceStatus, type DataRecord } from 'jimu-core'
 import { Button } from 'jimu-ui'
 
 import { type IMConfig } from '../config'
@@ -65,6 +65,56 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     })
   }
 
+  setDummySourceRecordsToOutputDs = () => {
+    /**
+     * Just like using other data sources, to use an output data source, widget should use it through `DataSourceComponent`, the framework will create the data source instance on the fly.
+     * No output data source instance means there isn't any widgets using the output data source,
+     * in this case, no need to set source to the output data source.
+     */
+    if (!this.getOutputDataSource()) {
+      return
+    }
+
+    /**
+     * Need origin data source instance to get source records.
+     * If do not have origin data source instance, set status of output data source to not ready, which indicates output data source is not ready to do query.
+     */
+    if (!this.getOriginDataSource()) {
+      this.getOutputDataSource().setStatus(DataSourceStatus.NotReady)
+      this.getOutputDataSource().setCountStatus(DataSourceStatus.NotReady)
+      return
+    }
+    const srs = this.getOutputDataSource()?.getSourceRecords()
+
+    // TODO: Does not work. ExB executes endless loop.. something with paging? Idk. How to create DataRecords?
+    // TODO: Different idea: Write own data (e.g. w3w) to client-side FL and use this as OriginDataSource?
+    const srTemplate = srs[0] //.clone()
+    srTemplate.feature.attributes = {
+      aggregateGeometries: null,
+      geometry: null,
+      symbol: null,
+      attributes: {
+        FID: 13,
+        Stadt: 'Zuuuuuuuuuuuuuuuuuuuuuuuu',
+        Land: 'CH',
+        Venue: 'Xxxxxxxxxxxxxxxxxxxttt',
+        Date: 1364515200000,
+        YouTube: null,
+        IntegerSAT: null
+      },
+      popupTemplate: null
+    }
+
+    this.getOutputDataSource()?.clearSourceRecords()
+    this.getOutputDataSource()?.setSourceRecords(srs)
+    // this.getOutputDataSource()?.setSourceRecords([srTemplate])
+    /**
+     * Status of output data source is not ready by default, set it to unloaded to let other widgets know output data source is ready to do query.
+     */
+    this.getOutputDataSource()?.setStatus(DataSourceStatus.Unloaded)
+    this.getOutputDataSource()?.setCountStatus(DataSourceStatus.Unloaded)
+  }
+
   render () {
     if (!this.isDsConfigured()) {
       return (
@@ -90,6 +140,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
 
         <Button onClick={this.setSourceRecordsToOutputDs}>
           Update output data source
+        </Button>
+
+        <Button onClick={this.setDummySourceRecordsToOutputDs}>
+          Update output data source with dummy records
         </Button>
 
         <DataSourceComponent
